@@ -43,8 +43,8 @@ if __name__ == '__main__':
     run('yum install -y openssl')
     run('yum install -y python-pip')
     run('yum install -y yum-utils')
-    run('yum install device-mapper-persistent-data')
-    run('yum install lvm2')
+    run('yum install -y device-mapper-persistent-data')
+    run('yum install -y lvm2')
     run('pip install --upgrade pip')
 
     docker_repo = '''\
