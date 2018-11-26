@@ -1,0 +1,53 @@
+{
+    "variables": {
+        "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+        "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+        "region": "us-east-1"
+    },
+    "builders": [
+        {
+            "access_key": "{{user `aws_access_key`}}",
+            "ami_name": "centos-aws-{{timestamp}}",
+            "instance_type": "t2.micro",
+            "region": "eu-central-1",
+            "secret_key": "{{user `aws_secret_key`}}",
+            "source_ami_filter": {
+              "filters": {
+              "virtualization-type": "hvm",
+              "name": "CentOS Linux 7 *",
+              "root-device-type": "ebs"
+              },
+              "owners": ["679593333241"],
+              "most_recent": true
+            },
+            "ssh_username": "centos",
+            "type": "amazon-ebs"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+               "sleep 30",
+               "echo Updating Linux Packages...",
+               "sudo yum -y update",
+               "echo Installing Python...",
+               "sudo test -e /usr/bin/python || sudo yum install -y python-minimal"
+            ]
+        },
+        {
+            "type": "file",
+            "source": "./gw_centos_builder.tar",
+            "destination": "/home/centos/"
+        },
+        {
+            "type": "shell",
+            "inline": [
+               "echo Unpackaging Builder Package...",
+               "tar xvf gw_centos_builder.tar",
+               "echo Executing Python...",
+               "sudo python gw_centos_builder.py -c gw_centos_config.yaml"
+            ]
+        }
+    ]
+}
