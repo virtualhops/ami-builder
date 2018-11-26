@@ -1,3 +1,5 @@
-# ami-builder
+Read the files in this order:
 
-Start reading the .sh file... and the rest will start to make sense.
+1. gw_centos_builder.sh
+2. gw_centos_builder.json
+3. gw_centos_builder.py
